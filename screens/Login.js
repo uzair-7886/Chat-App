@@ -1,4 +1,4 @@
-import { View, Text,Image,SafeAreaView,TouchableOpacity,Button,TextInput,StyleSheet } from 'react-native'
+import { View, Text,Image,SafeAreaView,TouchableOpacity,Button,TextInput,StyleSheet,ActivityIndicator } from 'react-native'
 import React from 'react'
 import {signInWithEmailAndPassword} from 'firebase/auth'
 import {auth} from '../config/firebase'
@@ -11,16 +11,24 @@ const Login = ({navigation}) => {
 
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
+    const [loadingLogin,setLoadingLogin]=useState(false)
 
     const signIn=()=>{
+        setLoadingLogin(true);
         if(email!==""&&password!==""){
             signInWithEmailAndPassword(auth,email,password)
             .then(()=>console.log("login successful"))
             .catch((err)=>Alert.alert("login error",err.message))
         }
+        setLoadingLogin(false)
     }
     
   return (
+    loadingLogin?
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size='large' color={colors.primary}/>
+      </View>
+      :
     <View
     style={styles.container}
     >
@@ -67,7 +75,7 @@ const Login = ({navigation}) => {
         <TouchableOpacity
         onPress={()=>navigation.navigate("Signup")}
         >
-            <Text style={{color:'#F57C00',fontWeight:600,fontSize:14}}> SignUp</Text>
+            <Text style={{color:'#42BCEA',fontWeight:600,fontSize:14}}> SignUp</Text>
         </TouchableOpacity>
     </View>
     </SafeAreaView>
@@ -83,7 +91,7 @@ const styles=StyleSheet.create({
     title:{
         fontSize:36,
         fontWeight:'bold',
-        color:'orange',
+        color:'#42BCEA',
         alignSelf:'center',
         paddingBottom:24,
         marginBottom:42
@@ -117,7 +125,7 @@ const styles=StyleSheet.create({
         marginHorizontal:30
     },
     button:{
-        backgroundColor:'#F57C00',
+        backgroundColor:'#42BCEA',
         height:58,
         borderRadius:10,
         alignItems:'center',

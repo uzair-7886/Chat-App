@@ -4,8 +4,8 @@ import React, {
     useLayoutEffect,
     useCallback
   } from 'react';
-  import { TouchableOpacity, Text } from 'react-native';
-  import { GiftedChat } from 'react-native-gifted-chat';
+  import { TouchableOpacity, Text ,View,StyleSheet} from 'react-native';
+  import { GiftedChat,Bubble,Send } from 'react-native-gifted-chat';
   import {
     collection,
     addDoc,
@@ -18,12 +18,18 @@ import React, {
   import { useNavigation } from '@react-navigation/native';
   import { AntDesign } from '@expo/vector-icons';
   import colors from '../colors';
+  import { ActivityIndicator } from 'react-native';
+  import { Ionicons } from '@expo/vector-icons';
+  import { FontAwesome } from '@expo/vector-icons';
+  import messageLoading from '../assets/msg-loading.json'
+  import Lottie from 'lottie-react-native';
 
 
   export default function Chat() {
 
     const [messages, setMessages] = useState([]);
     const navigation = useNavigation();
+    const [loadingMessages,setLoadingMessages]=useState(true)
 
   const onSignOut = () => {
       signOut(auth).catch(error => console.log('Error logging out: ', error));
@@ -31,14 +37,32 @@ import React, {
 
     useLayoutEffect(() => {
         navigation.setOptions({
+          // <title></title>
+          title:"Chat Room",
+          headerTitleStyle:{
+            color:colors.gray,
+          },
           headerRight: () => (
             <TouchableOpacity
               style={{
-                marginRight: 10
+                marginRight: 10,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
               onPress={onSignOut}
             >
-              <AntDesign name="logout" size={24} color={colors.gray} style={{marginRight: 10}}/>
+              <Text
+              style={{
+                color: colors.primary,
+                fontSize: 16,
+                fontWeight: 'bold',
+                marginRight: 5,
+              }}
+              >
+                Logout
+              </Text>
+              <AntDesign name="logout" size={24} color={colors.primary} style={{marginRight: 10}}/>
             </TouchableOpacity>
           )
         });
@@ -59,6 +83,7 @@ import React, {
               user: doc.data().user
             }))
           );
+          setLoadingMessages(false)
         });
     return unsubscribe;
       }, []);
@@ -76,13 +101,108 @@ import React, {
           user
         });
       }, []);
+      const renderBubble = (props) => {
+        const isSentByCurrentUser = props?.currentMessage?.user?._id === auth?.currentUser?.email;
+        
+
+        if(isSentByCurrentUser){
+          return(
+<View>
+            <Bubble
+              {...props}
+              wrapperStyle={{
+                left: {
+                  backgroundColor: "#f0f0f0"
+                  // isSentByCurrentUser ? '#fff' : colors.primary,
+                },
+                right: {
+                  backgroundColor: colors.primary,
+                },
+              }}
+              textStyle={{
+                left: {
+                  color: isSentByCurrentUser ? '#000' : colors.primary,
+                },
+                right: {
+                  color: '#fff',
+                },
+              }}
+            />
+            <View
+            style={{
+              alignItems:'flex-end'
+            }}
+            >
+            <Ionicons name="checkmark-done" size={20} color={colors.primary} />
+            </View>
+            
+            </View>
+          )
+        }else{
+          return(
+
+            <View>
+            <Bubble
+              {...props}
+              wrapperStyle={{
+                left: {
+                  backgroundColor: "#F4FCFF"
+                  // isSentByCurrentUser ? '#fff' : colors.primary,
+                },
+                right: {
+                  backgroundColor: colors.primary,
+                },
+              }}
+              textStyle={{
+                left: {
+                  color: isSentByCurrentUser ? '#000' : colors.primary,
+                },
+                right: {
+                  color: '#fff',
+                },
+              }}
+            />
+            </View>
+          )
+        }
+            
+
+          
+      };
+      const renderSend = (props) => {
+        return (
+          <Send {...props}>
+            <View style={{color: colors.primary, fontWeight: 'bold',alignContent:'center',justifyContent:'center',paddingBottom:10,paddingHorizontal:10}}>
+            <FontAwesome name="send" size={24} color={colors.primary} />
+            </View>
+          </Send>
+        );
+      };
+
+      const animationStyle=StyleSheet.create({
+        animation:{
+            flex:1,
+            justifyContent:'center',
+            // alignItems:'center',
+            height:400,
+            width:400,
+            alignSelf:'center',
+            opacity:0.5
+
+        }
+    });
 
       return (
-        // <>
-        //   {messages.map(message => (
-        //     <Text key={message._id}>{message.text}</Text>
-        //   ))}
-        // </>
+
+        loadingMessages? 
+        <View style={animationStyle.animation}>
+          <Lottie
+                source={messageLoading}
+                autoPlay
+                loop
+                />
+        </View>
+        :
         <GiftedChat
           messages={messages}
           showAvatarForEveryMessage={false}
@@ -100,6 +220,10 @@ import React, {
             _id: auth?.currentUser?.email,
             avatar: 'https://i.pravatar.cc/300'
           }}
+          renderBubble={renderBubble}
+          renderSend={renderSend}
         />
       );
+
+      
 }

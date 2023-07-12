@@ -13,6 +13,7 @@ import Signup from './screens/Signup';
 import Home from './screens/Home'
 import { createContext } from 'react';
 import { useState } from 'react';
+import colors from './colors';
 
 const Stack = createStackNavigator();
 
@@ -64,7 +65,7 @@ const RootNavigator=()=>{
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size='large' />
+        <ActivityIndicator size='large' color={colors.primary}/>
       </View>
     );
   }

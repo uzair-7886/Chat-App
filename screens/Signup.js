@@ -67,7 +67,7 @@ const Signup = ({navigation}) => {
         <TouchableOpacity
         onPress={()=>navigation.navigate("Login")}
         >
-            <Text style={{color:'#F57C00',fontWeight:600,fontSize:14}}> Login</Text>
+            <Text style={{color:'#42BCEA',fontWeight:600,fontSize:14}}> Login</Text>
         </TouchableOpacity>
     </View>
     </SafeAreaView>
@@ -83,7 +83,7 @@ const styles=StyleSheet.create({
     title:{
         fontSize:36,
         fontWeight:'bold',
-        color:'orange',
+        color:'#42BCEA',
         alignSelf:'center',
         paddingBottom:24,
         marginBottom:40
@@ -117,7 +117,7 @@ const styles=StyleSheet.create({
         marginHorizontal:30
     },
     button:{
-        backgroundColor:'#F57C00',
+        backgroundColor:'#42BCEA',
         height:58,
         borderRadius:10,
         alignItems:'center',
