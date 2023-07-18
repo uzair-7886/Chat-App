@@ -3,6 +3,14 @@
       "preview": {
         "android": {
           "buildType": "apk"
+        },
+        "env":{
+          "EXPO_PUBLIC_API_KEY":"AIzaSyAweAnwOlfzngeLNU9g1bUQOG4ouHdqqpM",
+          "EXPO_PUBLIC_AUTH_DOMAIN":"chat-app-b1dfd.firebaseapp.com",
+          "EXPO_PUBLIC_PROJECT_ID":"chat-app-b1dfd",
+          "EXPO_PUBLIC_STORAGE_BUCKET":"chat-app-b1dfd.appspot.com",
+          "EXPO_PUBLIC_MESSAGING_SENDER_ID":"588838686903",
+          "EXPO_PUBLIC_APP_ID":"1:588838686903:web:e60b78e6855eab709e3d32"
         }
       },
       "preview2": {
@@ -13,7 +21,11 @@
       "preview3": {
         "developmentClient": true
       },
-      "production": {}
+      "production": {
+        "android": {
+          "buildType": "apk"
+        }
+      }
     }
   }
   
